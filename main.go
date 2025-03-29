@@ -5,21 +5,24 @@ import (
 	"net/http"
 
 	"myapi/handlers" // 自作パッケージ
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	// 定義したハンドラを、サーバーで使用できるように登録
-	// 第二引数に先ほど作成した自作ハンドラhellohandlerを渡す
-	http.HandleFunc("/hello", handlers.HelloHandler)
-	http.HandleFunc("/article", handlers.PostArticleHandler)
-	http.HandleFunc("/article/list", handlers.ArticleListHandler)
-	http.HandleFunc("/article/1", handlers.ArticleDetailHandler)
-	http.HandleFunc("/article/nice", handlers.PostNiceHandler)
-	http.HandleFunc("/comment", handlers.PostCommentHandler)
+	r := mux.NewRouter()
+
+	r.HandleFunc("/hello", handlers.HelloHandler).Methods(http.MethodGet)
+	r.HandleFunc("/article", handlers.PostArticleHandler).Methods(http.MethodPost)
+	r.HandleFunc("/article/list", handlers.ArticleListHandler).Methods(http.MethodGet)
+	r.HandleFunc("/article/{id:[0-9]+}", handlers.ArticleDetailHandler).Methods(http.MethodGet)
+	r.HandleFunc("/article/nice", handlers.PostNiceHandler).Methods(http.MethodPost)
+	r.HandleFunc("/comment", handlers.PostCommentHandler).Methods(http.MethodPost)
 
 	// サーバー起動時のログを出力
 	log.Println("server start at port 8080") // 日時とともに引数に渡された内容がターミナルに出力される
 
 	// localhost:8080にてサーバーを起動
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
