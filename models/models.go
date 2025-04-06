@@ -7,7 +7,7 @@ type Comment struct {
 	CommentID int       `json:"comment_id"` //タグ（jsonキーの名前を指定）
 	ArticleID int       `json:"article_id"`
 	Message   string    `json:"message"`
-	CreatedAt time.Time `json:"created_at""` // 標準パッケージtimeに含まれるtime.Time型
+	CreatedAt time.Time `json:"created_at"` // 標準パッケージtimeに含まれるtime.Time型
 }
 
 type Article struct {
